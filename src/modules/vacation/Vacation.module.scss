@@ -1,0 +1,67 @@
+.wrapper {
+  width: 100%;
+  padding: 2% 2.5%;
+  min-height: 90vh;
+  background-color: #1a1a1a;
+  font-size: 1.6rem;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+}
+
+.timeline-res {
+  position: fixed;
+  right: 5rem;
+  bottom: 10vh;
+  padding: 1rem 1.5rem;
+  font-size: 2rem;
+  background-color: rgb(209, 60, 60);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.5s ease-in-out;
+  }
+}
+
+.drawer {
+  background-color: #1a1a1a;
+}
+
+.content {
+  width: 42%;
+}
+
+// responsive
+@media only screen and (max-width: 1500px) {
+  .wrapper {
+    font-size: 1.35rem;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .wrapper {
+    font-size: 1.15rem;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .wrapper {
+    --side-width: 18em;
+    font-size: 1.4rem;
+  }
+  .content {
+    width: 65%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .wrapper {
+    font-size: 1.3rem;
+  }
+
+  .content {
+    width: 100%;
+  }
+}

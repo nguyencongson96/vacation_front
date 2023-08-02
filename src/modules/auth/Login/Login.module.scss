@@ -1,0 +1,61 @@
+.title {
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  font-size: 3.5rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 40px;
+}
+
+.direct {
+  width: 100%;
+  font-size: 0.8em;
+  color: white;
+  text-align: center;
+
+  a {
+    color: #738ff5;
+    font-style: italic;
+    font-size: 1.3em;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.form-item {
+  padding: 0 !important;
+
+  input {
+    background-color: rgba(31, 32, 35, 0.5);
+    border: none !important;
+  }
+}
+
+.btn-submit {
+  display: block;
+  width: fit-content;
+  margin: 2rem auto;
+  padding: 0 3rem;
+  height: 50px;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+.re-pass {
+  display: block;
+  color: #f58450;
+  width: fit-content;
+  font-style: italic;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  margin-right: 1rem;
+  margin-left: auto;
+}
+
+@media only screen and (max-width: 992px) {
+}
+
+@media only screen and (max-width: 576px) {
+}
