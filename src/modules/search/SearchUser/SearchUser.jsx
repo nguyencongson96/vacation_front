@@ -31,11 +31,8 @@ const SearchUser = () => {
 
   const handleAddFr = (id) => dispatch(addFriend({ id: id }));
 
-  console.log(page, pages);
-
   return (
     <>
-      <div className={cx("title")}>People</div>
       <div id="result" className={cx("result")}>
         <InfiniteScroll
           dataLength={data.length}
