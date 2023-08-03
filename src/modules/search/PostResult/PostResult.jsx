@@ -20,11 +20,13 @@ const PostResult = () => {
   const timeline = searchParams.get("tl");
   const { list, page, pages } = useSelector((state) => state.vacation.posts);
   const [handlePost, setHandlePost] = useState("update");
+  const location = list[0]?.location;
+  const chosenLocation = `${location?.city} - ${location.district} - ${location.detail}`;
 
   useEffect(() => {
     dispatch(
       getManyPosts({
-        type: "vacation",
+        type: title,
         id: id,
         timeline: timeline,
         page: 1,
@@ -35,7 +37,7 @@ const PostResult = () => {
   const loadMoreData = () =>
     dispatch(
       getManyPosts({
-        type: "vacation",
+        type: title,
         id: id,
         timeline: timeline,
         page: page + 1,
@@ -46,7 +48,7 @@ const PostResult = () => {
     <div className={cx("wrapper")}>
       <header className={cx("header")}>
         <h1>{title}</h1>
-        <h3>{`#${timeline}`}</h3>
+        <h3>{`#${timeline || chosenLocation}`}</h3>
       </header>
       <main className={cx("main")}>
         <div className={cx("container")}>

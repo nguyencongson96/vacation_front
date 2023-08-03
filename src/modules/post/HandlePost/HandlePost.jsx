@@ -9,7 +9,6 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import vacationAPI from "~/api/vacationAPI";
 import SelectLocation from "~/components/SelectLocation/SelectLocation";
-import Notification from "~/components/Notification/Notification";
 import ImageField from "~/components/ImageField/ImageField";
 import Modal from "~/components/Modal/Modal";
 import { Avatar, List } from "antd";
@@ -44,10 +43,6 @@ const HandlePost = ({ showModal, setShowModal, type, postId, setPostId, vacation
   // set content of post
   const [content, setContent] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [openNoti, setOpenNoti] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const imgRef = useRef();
   // This function gets the vacationId from the searchParams.
@@ -85,26 +80,21 @@ const HandlePost = ({ showModal, setShowModal, type, postId, setPostId, vacation
       resources: srcListId,
     };
     try {
-      let res;
       setIsLoading(true);
       switch (type) {
         case "create":
         case "newfeed":
-          res = await vacationAPI.createPost(params);
+          await vacationAPI.createPost(params);
           break;
         case "update":
-          res = await vacationAPI.updatePost({ id: postId, body: params });
+          await vacationAPI.updatePost({ id: postId, body: params });
           break;
         default:
           break;
       }
-      setIsSuccess(true);
-      setMsg(res.data?.message);
+
       dispatch(isPostListChanged(true));
-    } catch (error) {
-      setIsError(true);
-      setMsg(error.message);
-    }
+    } catch (error) {}
     setIsLoading(false);
     dispatch(resetResources());
     setContent("");
@@ -115,15 +105,12 @@ const HandlePost = ({ showModal, setShowModal, type, postId, setPostId, vacation
     });
     setSelectedVacation({ title: "Choose Your Vacation", _id: "" });
     setShowModal(false);
-    setOpenNoti(true);
     setPostId && setPostId("");
     type === "newfeed" && navigate(`/vacation/${selectedVacation._id}/post`);
   };
 
   // This function handles the click event.
-  const handleDeleteImg = (id) => {
-    dispatch(deleteImg(id));
-  };
+  const handleDeleteImg = (id) => dispatch(deleteImg(id));
 
   // This function gets the title of the modal.
   const titleModal = type === "create" || type === "newfeed" ? "New Post" : "Update Post";
@@ -142,118 +129,94 @@ const HandlePost = ({ showModal, setShowModal, type, postId, setPostId, vacation
   // This function checks if the create button is disabled.
   const isDisabledCreate = !vacationId || !selectedLocation.detail?.id || !content;
   // function call after the noti close
-  const handleSuccess = () => {
-    setIsSuccess(false);
-    setMsg("");
-  };
-  const handleError = () => {
-    setIsError(false);
-    setMsg("");
-  };
-  return (
-    <>
-      <Modal open={showModal} setOpen={setShowModal} title={titleModal} handleAfterClose={handleAfterClose}>
-        <div className={cx("modal-container")}>
-          <div className={cx("user-info")}>
-            <div className={cx("info-name")}>
-              <Avatar src={info?.avatar?.path} />
-              <div className={cx("username")}>{info?.username}</div>
-            </div>
-            {type === "newfeed" && (
-              <Dropdown
-                className="post-modal"
-                selected={selectedVacation}
-                setSelected={setSelectedVacation}
-              />
-            )}
-          </div>
-          <TextArea
-            placeholder="What is on your mind..."
-            autoSize={{
-              minRows: 6,
-              maxRows: 12,
-            }}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            disabled={!vacationId}
-            spellCheck={false}
-          />
-          <div className={cx("img-uploader")}>
-            <List
-              grid={{
-                gutter: 8,
-                column: 4,
-              }}
-              dataSource={resources}
-              loading={{
-                spinning: isLoadingImg,
-                indicator: <Loading3QuartersOutlined spin={true} />,
-              }}
-              renderItem={(item, index) => (
-                <>
-                  <List.Item>
-                    <div className={cx("item")}>
-                      <ImageField rootClassName={cx("resource")} src={item.path} />
-                      <CloseCircleOutlined
-                        className={cx("img-btn")}
-                        onClick={() => handleDeleteImg(item._id)}
-                      />
-                    </div>
-                  </List.Item>
-                </>
-              )}
-            />
-          </div>
-          <div className={cx("post-extension-container")}>
-            <div className={cx("post-extension")}>
-              <div> Add on: </div>
-              <div className={cx("extensions")}>
-                <div>
-                  <FontAwesomeIcon
-                    onClick={openModal}
-                    icon={faLocationDot}
-                    className={cx("icon", !vacationId && "disable")}
-                  />
-                  {!!vacationId && (
-                    <SelectLocation
-                      openLocation={modalIsOpen}
-                      setOpenLocation={setIsOpen}
-                      setLocation={setSelectedLocation}
-                    />
-                  )}
-                </div>
 
-                <div className={cx("upload")} onClick={() => imgRef.current.click()}>
-                  <UpLoad imgRef={imgRef} body={{ field: "post", id: vacationId }} disabled={!vacationId} />
-                  <FontAwesomeIcon icon={faImage} className={cx("icon", !vacationId && "disable")} />
-                </div>
+  return (
+    <Modal open={showModal} setOpen={setShowModal} title={titleModal} handleAfterClose={handleAfterClose}>
+      <div className={cx("modal-container")}>
+        <div className={cx("user-info")}>
+          <div className={cx("info-name")}>
+            <Avatar src={info?.avatar?.path} />
+            <div className={cx("username")}>{info?.username}</div>
+          </div>
+          {type === "newfeed" && (
+            <Dropdown className="post-modal" selected={selectedVacation} setSelected={setSelectedVacation} />
+          )}
+        </div>
+        <TextArea
+          placeholder="What is on your mind..."
+          autoSize={{
+            minRows: 6,
+            maxRows: 12,
+          }}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          disabled={!vacationId}
+          spellCheck={false}
+        />
+        <div className={cx("img-uploader")}>
+          <List
+            grid={{
+              gutter: 8,
+              column: 4,
+            }}
+            dataSource={resources}
+            loading={{
+              spinning: isLoadingImg,
+              indicator: <Loading3QuartersOutlined spin={true} />,
+            }}
+            renderItem={(item, index) => (
+              <>
+                <List.Item>
+                  <div className={cx("item")}>
+                    <ImageField rootClassName={cx("resource")} src={item.path} />
+                    <CloseCircleOutlined
+                      className={cx("img-btn")}
+                      onClick={() => handleDeleteImg(item._id)}
+                    />
+                  </div>
+                </List.Item>
+              </>
+            )}
+          />
+        </div>
+        <div className={cx("post-extension-container")}>
+          <div className={cx("post-extension")}>
+            <div> Add on: </div>
+            <div className={cx("extensions")}>
+              <div>
+                <FontAwesomeIcon
+                  onClick={openModal}
+                  icon={faLocationDot}
+                  className={cx("icon", !vacationId && "disable")}
+                />
+                {!!vacationId && (
+                  <SelectLocation
+                    openLocation={modalIsOpen}
+                    setOpenLocation={setIsOpen}
+                    setLocation={setSelectedLocation}
+                  />
+                )}
+              </div>
+
+              <div className={cx("upload")} onClick={() => imgRef.current.click()}>
+                <UpLoad imgRef={imgRef} body={{ field: "post", id: vacationId }} disabled={!vacationId} />
+                <FontAwesomeIcon icon={faImage} className={cx("icon", !vacationId && "disable")} />
               </div>
             </div>
-            {selectedLocation?.detail.title !== "" && (
-              <div className={cx("result")}>
-                <FontAwesomeIcon icon={faLocationDot} />
-                <span>{` ${selectedLocation.detail?.title} - ${selectedLocation.district?.title} - ${selectedLocation.city?.title}`}</span>
-              </div>
-            )}
           </div>
-          <button onClick={handleClick} disabled={isLoading || isDisabledCreate} className={cx("btn-submit")}>
-            {type === "create" || type === "newfeed" ? " Create Post" : "Update"}
-            {isLoading && <Loading3QuartersOutlined spin={true} />}
-          </button>
+          {selectedLocation?.detail.title !== "" && (
+            <div className={cx("result")}>
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span>{` ${selectedLocation.detail?.title} - ${selectedLocation.district?.title} - ${selectedLocation.city?.title}`}</span>
+            </div>
+          )}
         </div>
-      </Modal>
-      {isError && (
-        <Notification
-          isSuccess={isSuccess}
-          isError={isError}
-          msg={msg}
-          openNoti={openNoti}
-          setOpenNoti={setOpenNoti}
-          handleSuccess={handleSuccess}
-          handleError={handleError}
-        />
-      )}
-    </>
+        <button onClick={handleClick} disabled={isLoading || isDisabledCreate} className={cx("btn-submit")}>
+          {type === "create" || type === "newfeed" ? " Create Post" : "Update"}
+          {isLoading && <Loading3QuartersOutlined spin={true} />}
+        </button>
+      </div>
+    </Modal>
   );
 };
 

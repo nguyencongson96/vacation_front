@@ -30,6 +30,34 @@ export const getDetailVacation = createAsyncThunk("vacation/getDetailVacation", 
   }
 });
 
+export const createVacation = createAsyncThunk("vacation/createVacation", async (arg, thunkAPI) => {
+  try {
+    const res = await vacationAPI.createVacation(arg);
+    return res.data.data;
+  } catch (error) {
+    if (!error.response) {
+      return thunkAPI.rejectWithValue({ message: error.message });
+    }
+    return thunkAPI.rejectWithValue({
+      message: error.response.data.message,
+    });
+  }
+});
+
+export const updateVacation = createAsyncThunk("vacation/updateVacation", async (arg, thunkAPI) => {
+  try {
+    const res = await vacationAPI.updateVacation({ id: arg?.id, body: arg?.body });
+    return res.data.data;
+  } catch (error) {
+    if (!error.response) {
+      return thunkAPI.rejectWithValue({ message: error.message });
+    }
+    return thunkAPI.rejectWithValue({
+      message: error.response.data.message,
+    });
+  }
+});
+
 export const deleteVacation = createAsyncThunk("vacation/deleteVacation", async (arg, thunkAPI) => {
   try {
     const res = await vacationAPI.deleteVacation(arg);
@@ -114,6 +142,20 @@ const vacationSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getDetailVacation.fulfilled, (state, action) => {
+        state.detail = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(createVacation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createVacation.fulfilled, (state, action) => {
+        state.detail = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(updateVacation.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateVacation.fulfilled, (state, action) => {
         state.detail = action.payload;
         state.isLoading = false;
       })

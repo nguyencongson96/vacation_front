@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  gap: 10rem;
+  justify-content: space-between;
   width: 80vw;
   min-height: 90vh;
   margin: auto;
@@ -12,11 +12,11 @@
     top: 10vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    padding-top: 10%;
     gap: 5rem;
-    width: fit-content;
+    width: 20%;
+    text-align: center;
     height: 60vh;
-    padding: 1rem 5rem;
     background-color: rgb(129, 93, 38);
     border-radius: 8px;
   }
@@ -31,8 +31,7 @@
   }
 
   .main {
-    flex: 1;
-    width: 60%;
+    width: 75%;
     border-radius: 8px;
     color: white;
     .container {

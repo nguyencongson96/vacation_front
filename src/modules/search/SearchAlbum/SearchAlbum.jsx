@@ -3,7 +3,7 @@ import styles from "./SearchAlbum.module.scss";
 import classNames from "classnames/bind";
 import { searchOneModel } from "~/store/slices/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { Avatar, Card, List } from "antd";
 import EmptyRes from "../Empty/EmptyRes";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
@@ -41,7 +41,6 @@ const SearchAlbum = () => {
 
   return (
     <>
-      <div className={cx("title")}>Album</div>
       <div id="result" className={cx("result")}>
         <InfiniteScroll
           dataLength={data.length}
@@ -51,21 +50,23 @@ const SearchAlbum = () => {
         >
           <List
             style={{ overflowX: "hidden" }}
-            grid={{ gutter: 32, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 3 }}
+            grid={{ gutter: 30, xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3 }}
             dataSource={data}
             renderItem={(item) => (
-              <List.Item>
-                <Card className={cx("item")}>
-                  <div className={cx("user-info")}>
-                    <Avatar src={item.authorInfo?.avatar.path} />
-                    <div>{item.authorInfo?.username}</div>
-                  </div>
-                  <ImageField src={item.cover} rootClassName={cx("cover")} preview={false} />
-                  <div className={cx("item-name")}>
-                    <span>{item.title}</span>
-                  </div>
-                </Card>
-              </List.Item>
+              <NavLink to={`/album/${item._id}`}>
+                <List.Item>
+                  <Card className={cx("item")}>
+                    <div className={cx("user-info")}>
+                      <Avatar src={item.authorInfo?.avatar.path} />
+                      <div>{item.authorInfo?.username}</div>
+                    </div>
+                    <ImageField src={item.cover} rootClassName={cx("cover")} preview={false} />
+                    <div className={cx("item-name")}>
+                      <span>{item.title}</span>
+                    </div>
+                  </Card>
+                </List.Item>
+              </NavLink>
             )}
           />
         </InfiniteScroll>

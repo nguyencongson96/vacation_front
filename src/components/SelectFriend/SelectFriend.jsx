@@ -70,32 +70,13 @@ const SelectFriend = ({ open, setOpen, userList, setUserList, type, title }) => 
 
   // handle friend selected
   const handleSelectedUser = (user, type) => {
-    if (type === "searchList") {
-      setUserList((prev) => [
-        ...prev,
-        {
-          username: user.username,
-          _id: user._id,
-        },
-      ]);
-    } else {
-      setUserList((prev) => [
-        ...prev,
-        {
-          username: user.userInfo.username,
-          _id: user.userInfo._id,
-        },
-      ]);
-    }
+    const chosenUser = type === "searchList" ? user : user.userInfo;
+    const isExisted = userList.find((item) => item._id === chosenUser._id);
+    !isExisted && setUserList((prev) => prev.concat({ username: chosenUser.username, _id: chosenUser._id }));
   };
 
-  const handleClear = (id) => {
-    setUserList((prev) => prev.filter((item) => item._id !== id));
-  };
-
-  const handleSubmit = () => {
-    setOpen(false);
-  };
+  const handleClear = (id) => setUserList((prev) => prev.filter((item) => item._id !== id));
+  const handleSubmit = () => setOpen(false);
 
   return (
     <Modal open={open} setOpen={setOpen} title="Select Your Friend">

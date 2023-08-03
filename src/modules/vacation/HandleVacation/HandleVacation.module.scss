@@ -1,6 +1,6 @@
 // Css Modal
 
-.modal-container {
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -171,19 +171,18 @@
 }
 // btn
 .btn-submit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2.5rem;
-  width: 100%;
-  padding: 1rem;
+  width: 40%;
+  margin: 0 auto;
   background-color: rgba(116, 96, 96, 0.35);
   color: white;
   font-style: italic;
-  font-size: 1.6rem;
-  letter-spacing: 1.2px;
-  border-radius: 20px;
-  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+
+  &:hover {
+    border: 1px solid white !important;
+  }
 
   &:disabled {
     opacity: 0.2;

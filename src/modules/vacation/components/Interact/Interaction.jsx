@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import styles from "./Interaction.module.scss";
 import classNames from "classnames/bind";
 import interactionAPI from "~/api/interactionAPI";
-import Notification from "~/components/Notification/Notification";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
@@ -49,9 +48,6 @@ const Interaction = (props) => {
   const [editCmtValue, setEditCmtValue] = useState(""); // state for input value
   const [openPopOver, setOpenPopOver] = useState(false);
   // state for message when error
-  const [isError, setIsError] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [openNoti, setOpenNoti] = useState(false);
   //state for loading
   const [loading, setLoading] = useState(true);
   const [cmtLoadingId, setCmtLoadingId] = useState("");
@@ -162,11 +158,7 @@ const Interaction = (props) => {
         });
         setEditCmtValue("");
       }
-    } catch (error) {
-      setIsError(true);
-      setOpenNoti(true);
-      setMsg(error.message);
-    }
+    } catch (error) {}
     setCmtLoadingId("");
   };
 
@@ -188,11 +180,7 @@ const Interaction = (props) => {
           type: "posts",
         });
         setIsCallingReq(false);
-      } catch (error) {
-        setIsError(true);
-        setOpenNoti(true);
-        setMsg(error.message);
-      }
+      } catch (error) {}
     }
   };
 
@@ -214,11 +202,7 @@ const Interaction = (props) => {
           page: 1,
           pages: res.data.meta?.pages,
         });
-      } catch (error) {
-        setIsError(true);
-        setOpenNoti(true);
-        setMsg(error.message);
-      }
+      } catch (error) {}
     }
   };
   const loadMoreDataLikes = async () => {
@@ -259,16 +243,9 @@ const Interaction = (props) => {
           total: prev.total - 1,
         };
       });
-    } catch (error) {
-      setIsError(true);
-      setOpenNoti(true);
-      setMsg(error.message);
-    }
+    } catch (error) {}
   };
-  const handleErrorNoti = () => {
-    setIsError(false);
-    setMsg("");
-  };
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("container")}>
@@ -429,15 +406,6 @@ const Interaction = (props) => {
             </>
           )}
         </div>
-      )}
-      {isError && (
-        <Notification
-          openNoti={openNoti}
-          setOpenNoti={setOpenNoti}
-          msg={msg}
-          isError={isError}
-          handleError={handleErrorNoti}
-        />
       )}
     </div>
   );

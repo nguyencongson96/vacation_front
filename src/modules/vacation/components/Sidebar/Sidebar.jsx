@@ -16,8 +16,7 @@ import UpLoad from "~/components/UpLoad/UpLoad";
 import HandleVacation from "~/modules/vacation/HandleVacation/HandleVacation";
 import UserList from "~/modules/vacation/components/UserList/UserList";
 import { getDate } from "~/helpers/function";
-import Notification from "~/components/Notification/Notification";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailVacation } from "~/store/slices/vacationSlice";
 
@@ -25,8 +24,7 @@ const cx = classNames.bind(styles);
 const Sidebar = () => {
   const imgRef = useRef();
   const dispatch = useDispatch();
-  let [searchParams] = useSearchParams();
-  let vacationID = searchParams.get("vacationID"); // get vacationId of url
+  const vacationId = useParams().id;
 
   // Get User's info
   const { info } = useSelector((state) => state.auth);
@@ -35,8 +33,6 @@ const Sidebar = () => {
   const { authorInfo, cover, members, title, startingTime, endingTime, shareStatus } = detail;
   const { totalPost } = posts;
   // get msg of upload image
-  const { msg, isSuccess, isError } = useSelector((state) => state.resource);
-  const [openNoti, setOpenNoti] = useState(false);
   const [openUserList, setOpenUserList] = useState(false);
   const [open, setOpen] = useState(false);
   const [isUpdateImg, setIsUpdateImg] = useState(false);
@@ -59,8 +55,8 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    if (isUpdateImg) dispatch(getDetailVacation(vacationID)).then(() => setIsUpdateImg(false));
-  }, [isUpdateImg, dispatch, vacationID]);
+    if (isUpdateImg) dispatch(getDetailVacation(vacationId)).then(() => setIsUpdateImg(false));
+  }, [isUpdateImg, dispatch, vacationId]);
 
   const handleAfterClose = () => {
     setIsUpdateImg(true);
@@ -73,7 +69,7 @@ const Sidebar = () => {
         {isAuthor && (
           <UpLoad
             imgRef={imgRef}
-            body={{ field: "vcover", id: vacationID }}
+            body={{ field: "vcover", id: vacationId }}
             handleAfterClose={handleAfterClose}
           />
         )}
@@ -122,7 +118,7 @@ const Sidebar = () => {
             {isAuthor && (
               <FontAwesomeIcon icon={faPen} className={cx("title-icon")} onClick={() => setOpen(true)} />
             )}
-            <HandleVacation setOpen={setOpen} showModal={open} type="update" vacationId={vacationID} />
+            <HandleVacation setOpen={setOpen} showModal={open} type="update" vacationId={vacationId} />
           </div>
           <div className={cx("vacation-info")}>
             <div className={cx("vacation-name")}>
@@ -190,15 +186,6 @@ const Sidebar = () => {
           </NavLink>
         </div>
       </div>
-      {isError && (
-        <Notification
-          isError={isError}
-          isSuccess={isSuccess}
-          msg={msg}
-          openNoti={openNoti}
-          setOpenNoti={setOpenNoti}
-        />
-      )}
     </div>
   );
 };

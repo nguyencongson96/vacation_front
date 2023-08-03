@@ -9,6 +9,9 @@ const locationAPI = {
     }
     return axiosClient.get(url);
   },
+
+  getNationList: () => axiosClient.get(`${URL.LOCATION_URL}?type=level&number=4`),
+
   getManyLocations: (data) => {
     const url = `${URL.LOCATION_URL}?type=${data.type}&number=${data.number}&parentId=${data.parentId}`;
     return axiosClient.get(url);

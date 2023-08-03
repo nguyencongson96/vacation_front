@@ -13,7 +13,6 @@ import vacationAPI from "~/api/vacationAPI";
 import Modal from "~/components/Modal/Modal";
 import ImageField from "~/components/ImageField/ImageField";
 import HandlePost from "../HandlePost/HandlePost";
-import Notification from "~/components/Notification/Notification";
 import { useClickOutside } from "~/helpers/customHook";
 import { Link } from "react-router-dom";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
@@ -35,36 +34,19 @@ const PostItem = ({ postDetail, vacationId, setHandlePost, handlePost }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loadingDel, setLoadingDel] = useState(false);
   // state for msg when success or error
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [openNoti, setOpenNoti] = useState(false);
   const [postId, setPostId] = useState("");
 
   const handleDeletePost = async () => {
     try {
       setLoadingDel(true);
       setOpen(false);
-      const res = await vacationAPI.deletePost(_id);
-      setMsg(res.data?.message);
+      await vacationAPI.deletePost(_id);
       dispatch(isPostListChanged(true));
-      setIsSuccess(true);
       setLoadingDel(false);
     } catch (error) {
-      setMsg(error.message);
-      setIsError(true);
       setLoadingDel(false);
     }
     setOpenDeleteModal(false);
-    setOpenNoti(true);
-  };
-  const handleSuccess = () => {
-    setIsSuccess(false);
-    setMsg("");
-  };
-  const handleError = () => {
-    setIsError(false);
-    setMsg("");
   };
 
   useClickOutside(popupRef, () => {
@@ -183,17 +165,6 @@ const PostItem = ({ postDetail, vacationId, setHandlePost, handlePost }) => {
       </main>
 
       <Interaction likes={likes} comments={comments} postID={_id} isLikedStatus={isLiked} />
-      {(isSuccess || isError) && (
-        <Notification
-          isSuccess={isSuccess}
-          isError={isError}
-          msg={msg}
-          openNoti={openNoti}
-          setOpenNoti={setOpenNoti}
-          handleSuccess={handleSuccess}
-          handleError={handleError}
-        />
-      )}
     </div>
   );
 };

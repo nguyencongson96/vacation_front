@@ -5,14 +5,13 @@ import { uploadResource } from "~/store/slices/resourceSlice";
 const UpLoad = ({ imgRef, body, disabled, handleAfterClose }) => {
   const [files, setFiles] = useState(null);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (files !== null) {
+    if (files) {
       const formData = new FormData();
       formData.append("files", files);
       dispatch(uploadResource({ files: formData.get("files"), ...body })).then(
-        () => {
-          handleAfterClose && handleAfterClose();
-        }
+        () => handleAfterClose && handleAfterClose()
       );
       setFiles(null);
     }

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import styles from "./SearchLocation.module.scss";
 import classNames from "classnames/bind";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { searchOneModel } from "~/store/slices/searchSlice";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -35,7 +35,6 @@ const SearchLocation = () => {
 
   return (
     <>
-      <div className={cx("title")}>Location</div>
       <div id="result" className={cx("result")}>
         <InfiniteScroll
           dataLength={data.length}
@@ -48,7 +47,7 @@ const SearchLocation = () => {
             grid={{ gutter: 0, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 2 }}
             dataSource={data}
             renderItem={(item) => (
-              <Link
+              <NavLink
                 className={cx("item")}
                 key={item._id}
                 to={`/post/location?k=${item.title}&id=${item._id}`}
@@ -60,7 +59,7 @@ const SearchLocation = () => {
                   ellipsis={{ rows: 1, expandable: false }}
                   className={cx("des")}
                 >{`${item.district} - ${item.city}`}</Typography.Paragraph>
-              </Link>
+              </NavLink>
             )}
           />
         </InfiniteScroll>

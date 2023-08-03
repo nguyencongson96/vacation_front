@@ -2,7 +2,7 @@ import styles from "./SearchVacation.module.scss";
 import classNames from "classnames/bind";
 import { searchOneModel } from "~/store/slices/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { Avatar, Card, List } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
@@ -42,7 +42,6 @@ const SearchVacation = () => {
 
   return (
     <>
-      <div className={cx("title")}>Vacation</div>
       <div id="result" className={cx("result")}>
         <InfiniteScroll
           dataLength={data.length}
@@ -52,10 +51,10 @@ const SearchVacation = () => {
         >
           <List
             style={{ overflowX: "hidden" }}
-            grid={{ gutter: 32, xs: 1, sm: 2, md: 2, lg: 2, xl: 3, xxl: 3 }}
+            grid={{ gutter: 30, xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 3 }}
             dataSource={data}
             renderItem={(item) => (
-              <Link to={`/vacation/${item._id}/post`}>
+              <NavLink to={`/vacation/${item._id}/post`}>
                 <List.Item>
                   <Card className={cx("item")}>
                     <div className={cx("user-info")}>
@@ -68,7 +67,7 @@ const SearchVacation = () => {
                     </div>
                   </Card>
                 </List.Item>
-              </Link>
+              </NavLink>
             )}
           />
         </InfiniteScroll>

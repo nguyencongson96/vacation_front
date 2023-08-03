@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { axiosClient } from "~/api/axiosClient";
 import styles from "./SelectField.module.scss";
 import classNames from "classnames/bind";
-import { ErrorMessage } from "formik";
+import locationAPI from "~/api/locationAPI";
 const cx = classNames.bind(styles);
 
 const SelectField = (props) => {
@@ -11,30 +10,18 @@ const SelectField = (props) => {
   // Get name & value of Input
   const { name, value } = field;
 
-  //   console.log(value);
   useEffect(() => {
-    if (name === "nationality") {
-      const fetchAPi = async () => {
-        const url = "https://vacation-social-network.onrender.com/location?type=level&number=4";
-        const res = await axiosClient.get(url);
-        setSelectList(res.data.data);
-      };
-      fetchAPi();
-    }
-  }, []);
+    if (name === "nationality") locationAPI.getNationList().then((res) => setSelectList(res.data.data));
+  }, [name]);
 
   const handleSelectOption = (e) => {
-    console.log(e.target.value);
     const selectedValue = e.target.value;
-
-    const changeEvent = {
+    field.onChange({
       target: {
         name,
         value: selectedValue,
       },
-    };
-
-    field.onChange(changeEvent);
+    });
   };
 
   //label Classes
@@ -62,7 +49,6 @@ const SelectField = (props) => {
         ))}
       </select>
       <label className={labelClasses}>{label}</label>
-      <ErrorMessage name={name} render={(msg) => <p className={cx("error")}>{msg}</p>} />
     </div>
   );
 };
