@@ -6,13 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, FastField } from "formik";
 import { Validate, initValues } from "../config/validateConfig";
 import InputField from "~/components/CustomField/InputField/InputField";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { List, message, Button } from "antd";
 import { handleAuth, resetNoti } from "~/store/slices/authSlice";
 const cx = classNames.bind(styles);
 
 const Forgot = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { renderList, isLoading } = useSelector((state) => state.auth);
   const list = renderList[renderList.length - 1].list.children.data;
   const [messageApi, contextHolder] = message.useMessage();
@@ -28,7 +29,11 @@ const Forgot = () => {
         onSubmit={(value) => {
           dispatch(resetNoti());
           dispatch(handleAuth({ type: "forgotPassword", data: value })).then((res) => {
-            if (res.payload.status >= 400) messageApi.open({ type: "error", content: res.payload.message });
+            if (res.payload.status >= 400 || !res.payload.status) {
+              messageApi.open({ type: "error", content: res.payload.message });
+            } else {
+              navigate("/reset");
+            }
           });
         }}
       >
