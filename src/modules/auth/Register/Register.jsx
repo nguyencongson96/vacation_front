@@ -32,7 +32,11 @@ const Register = () => {
               data: value,
             })
           ).then((res) => {
-            if (res.payload.status >= 400) messageApi.open({ type: "error", content: res.payload.message });
+            messageApi.open({
+              type: res.payload.status >= 400 || !res.payload.status ? "error" : "success",
+              content: res.payload.message,
+              duration: 5,
+            });
           });
         }}
       >

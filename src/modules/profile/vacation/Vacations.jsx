@@ -44,7 +44,7 @@ const Vacations = () => {
           grid={{ gutter: 35, xs: 1, sm: 2, md: 2, lg: 3, xl: 3, xxl: 3 }}
           dataSource={list}
           renderItem={(item) => {
-            const isAuthor = userLoginId === item.authorInfo._id;
+            const isAuthor = userLoginId === item.authorInfo?._id;
             return (
               <List.Item className={cx("feed-item")}>
                 <NavLink to={`/vacation/${item._id}/post`}>
